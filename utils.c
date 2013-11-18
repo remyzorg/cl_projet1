@@ -659,8 +659,6 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   int			len;
   int			ch;
   int			quote;
-  char *                last_dollar;
-  char *                current_var;
   BOOL			quotedWildCards;
   BOOL			unquotedWildCards;
 
@@ -676,7 +674,7 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   argCount = 0;
   *retArgc = 0;
   *retArgv = NULL;
-  current_var = (char *) malloc (100 * sizeof(char));
+
   /*
    * Copy the command string into a buffer that we can modify,
    * reallocating it if necessary.
@@ -785,7 +783,7 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
 	   * If we were in a quote and we saw the same quote
 	   * character again then the quote is done.
 	   */
-	  if (ch == quote && ch != '$')
+	  if (ch == quote)
 	    {
 	      quote = '\0';
 
@@ -804,40 +802,16 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
 	      continue;
 	    }
 
-	  if (ch == '$' && quote != '$'){
-	    last_dollar = cpOut + 1;
-	    quote = ch;
-	    
-	  }
-
-	  if (quote == '$' && (ch == '\0' || isBlank(ch))){
-
-	    printf("Hey\n");
-	    int size = cpOut - last_dollar + 1;
-	    memcpy(current_var, last_dollar + 1, size);
-	    *(current_var + size - 1) = '\0';
-	    char * str_var = getenv(current_var);
-	    memcpy(last_dollar, str_var, strlen(str_var));
-	    
-	    cpOut = last_dollar + strlen (str_var);
-
-	    quote = '\0';
-
-	  }
-
-	  printf("ch: %d\n", ch);
-	  
 	  /*
 	   * Store the character.
 	   */
 	  *cpOut++ = ch;
 	}
 
-      printf("cpOut: %s\n", cpOut);
       /*
        * Make sure that quoting is terminated properly.
        */
-      if (quote && quote != '$')
+      if (quote)
 	{
 	  fprintf(stderr, "Unmatched quote character\n");
 
@@ -908,8 +882,8 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
 	{
 	  newArgTableSize = argCount + fileCount + 1;
 
-	  newArgTable = (const char **) realloc(argTable ,
-			(sizeof(const char *) * newArgTableSize));
+	  newArgTable = (const char **) realloc(argTable,
+						(sizeof(const char *) * newArgTableSize));
 
 	  if (newArgTable == NULL)
 	    {
@@ -939,9 +913,20 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
    */
   argTable[argCount] = NULL;
 
+  int i;
+  char * value;
+  for (i = 0; i < argCount; i++ ){
+    if (argTable[i][0] == '$'){
+      value = getenv(argTable[i] + 1);
+      argTable[i] = value ? value : "";
+    }
+  }
+
+   
   *retArgc = argCount;
   *retArgv = argTable;
 
+  
   return TRUE;
 }
 
