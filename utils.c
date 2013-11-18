@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <utime.h>
+#include <utime.h>
 
 
 /*
@@ -171,10 +172,10 @@ isDevice(const char * name)
  */
 BOOL
 copyFile(
-	 const char *	srcName,
-	 const char *	destName,
-	 BOOL		setModes
-	 )
+         const char *	srcName,
+         const char *	destName,
+         BOOL		setModes
+         )
 {
   int		rfd;
   int		wfd;
@@ -227,15 +228,15 @@ copyFile(
   while ((rcc = read(rfd, buf, sizeof(buf))) > 0)
     {
       if (intFlag)
-	{
-	  close(rfd);
-	  close(wfd);
+        {
+          close(rfd);
+          close(wfd);
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       if (fullWrite(wfd, buf, rcc) < 0)
-	goto error_exit;
+        goto error_exit;
     }
 
   if (rcc < 0)
@@ -371,7 +372,7 @@ expandWildCards(const char * fileNamePattern, const char *** retFileTable)
       (cp3 && (cp3 < last)))
     {
       fprintf(stderr,
-	      "Wildcards only implemented for last file name component\n");
+              "Wildcards only implemented for last file name component\n");
 
       return -1;
     }
@@ -392,10 +393,10 @@ expandWildCards(const char * fileNamePattern, const char *** retFileTable)
       dirName[last - fileNamePattern - 1] = '\0';
 
       if (dirName[0] == '\0')
-	{
-	  dirName[0] = '/';
-	  dirName[1] = '\0';
-	}
+        {
+          dirName[0] = '/';
+          dirName[1] = '\0';
+        }
     }
 
   /*
@@ -436,42 +437,42 @@ expandWildCards(const char * fileNamePattern, const char *** retFileTable)
        * Skip the current and parent directories.
        */
       if ((strcmp(dp->d_name, ".") == 0) ||
-	  (strcmp(dp->d_name, "..") == 0))
-	{
-	  continue;
-	}
+          (strcmp(dp->d_name, "..") == 0))
+        {
+          continue;
+        }
 
       /*
        * If the file name doesn't match the pattern then skip it.
        */
       if (!match(dp->d_name, last))
-	continue;
+        continue;
 
       /*
        * This file name is selected.
        * See if we need to reallocate the file name table.
        */
       if (fileCount >= fileTableSize)
-	{
-	  /*
-	   * Increment the file table size and reallocate it.
-	   */
-	  newFileTableSize = fileTableSize + EXPAND_ALLOC;
+        {
+          /*
+           * Increment the file table size and reallocate it.
+           */
+          newFileTableSize = fileTableSize + EXPAND_ALLOC;
 
-	  newFileTable = (char **) realloc((char *) fileTable,
-					   (newFileTableSize * sizeof(char *)));
+          newFileTable = (char **) realloc((char *) fileTable,
+                                           (newFileTableSize * sizeof(char *)));
 
-	  if (newFileTable == NULL)
-	    {
-	      fprintf(stderr, "Cannot allocate file list\n");
-	      closedir(dirp);
+          if (newFileTable == NULL)
+            {
+              fprintf(stderr, "Cannot allocate file list\n");
+              closedir(dirp);
 
-	      return -1;
-	    }
+              return -1;
+            }
 
-	  fileTable = newFileTable;
-	  fileTableSize = newFileTableSize;
-	}
+          fileTable = newFileTable;
+          fileTableSize = newFileTableSize;
+        }
 
       /*
        * Allocate space for storing the file name in a chunk.
@@ -479,18 +480,18 @@ expandWildCards(const char * fileNamePattern, const char *** retFileTable)
       str = getChunk(dirLen + strlen(dp->d_name) + 1);
 
       if (str == NULL)
-	{
-	  fprintf(stderr, "No memory for file name\n");
-	  closedir(dirp);
+        {
+          fprintf(stderr, "No memory for file name\n");
+          closedir(dirp);
 
-	  return -1;
-	}
+          return -1;
+        }
 
       /*
        * Save the file name in the chunk.
        */
       if (dirLen)
-	memcpy(str, dirName, dirLen);
+        memcpy(str, dirName, dirLen);
 
       strcpy(str + dirLen, dp->d_name);
 
@@ -568,69 +569,69 @@ match(const char * text, const char * pattern)
       ch = *pattern++;
 
       switch (ch)
-	{
-	case '*':  
-	  retryPat = pattern;
-	  retryText = text;
-	  break;
+        {
+        case '*':  
+          retryPat = pattern;
+          retryText = text;
+          break;
 
-	case '[':  
-	  found = FALSE;
+        case '[':  
+          found = FALSE;
 
-	  while ((ch = *pattern++) != ']')
-	    {
-	      if (ch == '\\')
-		ch = *pattern++;
+          while ((ch = *pattern++) != ']')
+            {
+              if (ch == '\\')
+                ch = *pattern++;
 
-	      if (ch == '\0')
-		return FALSE;
+              if (ch == '\0')
+                return FALSE;
 
-	      if (*text == ch)
-		found = TRUE;
-	    }
+              if (*text == ch)
+                found = TRUE;
+            }
 
-	  if (!found)
-	    {
-	      pattern = retryPat;
-	      text = ++retryText;
-	    }
+          if (!found)
+            {
+              pattern = retryPat;
+              text = ++retryText;
+            }
 
-	  /* fall into next case */
+          /* fall into next case */
 
-	case '?':  
-	  if (*text++ == '\0')
-	    return FALSE;
+        case '?':  
+          if (*text++ == '\0')
+            return FALSE;
 
-	  break;
+          break;
 
-	case '\\':  
-	  ch = *pattern++;
+        case '\\':  
+          ch = *pattern++;
 
-	  if (ch == '\0')
-	    return FALSE;
+          if (ch == '\0')
+            return FALSE;
 
-	  /* fall into next case */
+          /* fall into next case */
 
-	default:        
-	  if (*text == ch)
-	    {
-	      if (*text)
-		text++;
-	      break;
-	    }
+        default:        
+          if (*text == ch)
+            {
+              if (*text)
+                text++;
+              break;
+            }
 
-	  if (*text)
-	    {
-	      pattern = retryPat;
-	      text = ++retryText;
-	      break;
-	    }
+          if (*text)
+            {
+              pattern = retryPat;
+              text = ++retryText;
+              break;
+            }
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       if (pattern == NULL)
-	return FALSE;
+        return FALSE;
     }
 
   return TRUE;
@@ -686,11 +687,11 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
       newStrings = realloc(strings, len);
 
       if (newStrings == NULL)
-	{
-	  fprintf(stderr, "Cannot allocate string\n");
+        {
+          fprintf(stderr, "Cannot allocate string\n");
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       strings = newStrings;
       stringsLength = len;
@@ -699,10 +700,15 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   memcpy(strings, cmd, len);
   cp = strings;
 
+  
+  
   /*
    * Keep parsing the command string as long as there are any
    * arguments left.
    */
+
+  
+  
   while (*cp)
     {
       /*
@@ -725,98 +731,98 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
        * in the argument.
        */
       while (*cp)
-	{
-	  ch = *cp++;
+        {
+          ch = *cp++;
 
-	  /*
-	   * If we are not in a quote and we see a blank then
-	   * this argument is done.
-	   */
-	  if (isBlank(ch) && (quote == '\0'))
-	    break;
+          /*
+           * If we are not in a quote and we see a blank then
+           * this argument is done.
+           */
+          if (isBlank(ch) && (quote == '\0'))
+            break;
 
-	  /*
-	   * If we see a backslash then accept the next
-	   * character no matter what it is.
-	   */
-	  if (ch == '\\')
-	    {
-	      ch = *cp++;
+          /*
+           * If we see a backslash then accept the next
+           * character no matter what it is.
+           */
+          if (ch == '\\')
+            {
+              ch = *cp++;
 
-	      /*
-	       * Make sure there is a next character.
-	       */
-	      if (ch == '\0')
-		{
-		  fprintf(stderr,
-			  "Bad quoted character\n");
+              /*
+               * Make sure there is a next character.
+               */
+              if (ch == '\0')
+                {
+                  fprintf(stderr,
+                          "Bad quoted character\n");
 
-		  return FALSE;
-		}
+                  return FALSE;
+                }
 
-	      /*
-	       * Remember whether the quoted character
-	       * is a wildcard.
-	       */
-	      if (isWildCard(ch))
-		quotedWildCards = TRUE;
+              /*
+               * Remember whether the quoted character
+               * is a wildcard.
+               */
+              if (isWildCard(ch))
+                quotedWildCards = TRUE;
 
-	      *cpOut++ = ch;
+              *cpOut++ = ch;
 
-	      continue;
-	    }
+              continue;
+            }
 
-	  /*
-	   * If we see one of the wildcard characters then
-	   * remember whether it was seen inside or outside
-	   * of quotes.
-	   */
-	  if (isWildCard(ch))
-	    {
-	      if (quote)
-		quotedWildCards = TRUE;
-	      else
-		unquotedWildCards = TRUE;
-	    }
+          /*
+           * If we see one of the wildcard characters then
+           * remember whether it was seen inside or outside
+           * of quotes.
+           */
+          if (isWildCard(ch))
+            {
+              if (quote)
+                quotedWildCards = TRUE;
+              else
+                unquotedWildCards = TRUE;
+            }
 
-	  /*
-	   * If we were in a quote and we saw the same quote
-	   * character again then the quote is done.
-	   */
-	  if (ch == quote)
-	    {
-	      quote = '\0';
+          /*
+           * If we were in a quote and we saw the same quote
+           * character again then the quote is done.
+           */
+          if (ch == quote)
+            {
+              quote = '\0';
 
-	      continue;
-	    }
+              continue;
+            }
 
-	  /*
-	   * If we weren't in a quote and we see either type
-	   * of quote character, then remember that we are
-	   * now inside of a quote.
-	   */
-	  if ((quote == '\0') && ((ch == '\'') || (ch == '"')))
-	    {
-	      quote = ch;
+          /*
+           * If we weren't in a quote and we see either type
+           * of quote character, then remember that we are
+           * now inside of a quote.
+           */
+          if ((quote == '\0') && ((ch == '\'') || (ch == '"')))
+            {
+              quote = ch;
 
-	      continue;
-	    }
+              continue;
+            }
 
-	  /*
-	   * Store the character.
-	   */
-	  *cpOut++ = ch;
-	}
+          /*
+           * Store the character.
+           */
+          *cpOut++ = ch;
+        }
 
       /*
        * Make sure that quoting is terminated properly.
        */
       if (quote)
-	{
-	  fprintf(stderr, "Unmatched quote character\n");
+        {
+          fprintf(stderr, "Unmatched quote character\n");
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       /*
        * Null terminate the argument if it had shrunk, and then
@@ -824,22 +830,22 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
        * out too.
        */
       if (cp != cpOut)
-	*cpOut = '\0';
+        *cpOut = '\0';
 
       while (isBlank(*cp))
-	*cp++ = '\0';
+        *cp++ = '\0';
 
       /*
        * If both quoted and unquoted wildcards were used then
        * complain since we don't handle them properly.
        */
       if (quotedWildCards && unquotedWildCards)
-	{
-	  fprintf(stderr,
-		  "Cannot use quoted and unquoted wildcards\n");
+        {
+          fprintf(stderr,
+                  "Cannot use quoted and unquoted wildcards\n");
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       /*
        * Expand the argument into the matching filenames or accept
@@ -847,60 +853,60 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
        * wildcard characters in it.
        */
       if (unquotedWildCards)
-	{
-	  /*
-	   * Expand the argument into the matching filenames.
-	   */
-	  fileCount = expandWildCards(argument, &fileTable);
+        {
+          /*
+           * Expand the argument into the matching filenames.
+           */
+          fileCount = expandWildCards(argument, &fileTable);
 
-	  /*
-	   * Return an error if the wildcards failed to match.
-	   */
-	  if (fileCount < 0)
-	    return FALSE;
+          /*
+           * Return an error if the wildcards failed to match.
+           */
+          if (fileCount < 0)
+            return FALSE;
 
-	  if (fileCount == 0)
-	    {
-	      fprintf(stderr, "Wildcard expansion error\n");
+          if (fileCount == 0)
+            {
+              fprintf(stderr, "Wildcard expansion error\n");
 
-	      return FALSE;
-	    }
-	}
+              return FALSE;
+            }
+        }
       else
-	{
-	  /*
-	   * Set up to only store the argument itself.
-	   */
-	  fileTable = &argument;
-	  fileCount = 1;
-	}
+        {
+          /*
+           * Set up to only store the argument itself.
+           */
+          fileTable = &argument;
+          fileCount = 1;
+        }
 
       /*
        * Now reallocate the argument table to hold the file name.
        */
       if (argCount + fileCount >= argTableSize)
-	{
-	  newArgTableSize = argCount + fileCount + 1;
+        {
+          newArgTableSize = argCount + fileCount + 1;
 
-	  newArgTable = (const char **) realloc(argTable,
-						(sizeof(const char *) * newArgTableSize));
+          newArgTable = (const char **) realloc(argTable,
+                                                (sizeof(const char *) * newArgTableSize));
 
-	  if (newArgTable == NULL)
-	    {
-	      fprintf(stderr, "No memory for arg list\n");
+          if (newArgTable == NULL)
+            {
+              fprintf(stderr, "No memory for arg list\n");
 
-	      return FALSE;
-	    }
+              return FALSE;
+            }
 
-	  argTable = newArgTable;
-	  argTableSize = newArgTableSize;
-	}
+          argTable = newArgTable;
+          argTableSize = newArgTableSize;
+        }
 
       /*
        * Copy the new arguments to the end of the old ones.
        */
       memcpy((void *) &argTable[argCount], (const void *) fileTable,
-	     (sizeof(const char **) * fileCount));
+             (sizeof(const char **) * fileCount));
 
       /*
        * Add to the argument count.
@@ -913,8 +919,22 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
    */
   argTable[argCount] = NULL;
 
+  
+
   int i;
+  int valueArith = 0;
   char * value;
+  for (i = 0; i < argCount; i++ ){
+    if (argTable[i][0] == '$' && argTable[i][1] == '{'){
+      printf("START\n");
+      valueArith = parseArithToValue(argTable[i], strlen(argTable[i]));
+      printf("result : %d\n", valueArith);
+      /* sprintf("%d", valueArith); */
+    }
+  }
+
+
+  
   for (i = 0; i < argCount; i++ ){
     if (argTable[i][0] == '$'){
       value = getenv(argTable[i] + 1);
@@ -923,6 +943,9 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   }
 
    
+
+
+  
   *retArgc = argCount;
   *retArgv = argTable;
 
@@ -939,11 +962,11 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
  */
 BOOL
 makeString(
-	   int		argc,
-	   const char **	argv,
-	   char *		buf,
-	   int		bufLen
-	   )
+           int		argc,
+           const char **	argv,
+           char *		buf,
+           int		bufLen
+           )
 {
   int	len;
 
@@ -952,11 +975,11 @@ makeString(
       len = strlen(*argv);
 
       if (len >= bufLen)
-	{
-	  fprintf(stderr, "Argument string too long\n");
+        {
+          fprintf(stderr, "Argument string too long\n");
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
 
       strcpy(buf, *argv++);
 
@@ -964,7 +987,7 @@ makeString(
       bufLen -= len;
 
       if (argc)
-	*buf++ = ' ';
+        *buf++ = ' ';
 
       bufLen--; 
     }
@@ -1058,7 +1081,7 @@ fullWrite(int fd, const char * buf, int len)
       cc = write(fd, buf, len);
 
       if (cc < 0)
-	return -1;
+        return -1;
 
       buf += cc;
       total+= cc;
@@ -1088,10 +1111,10 @@ fullRead(int fd, char * buf, int len)
       cc = read(fd, buf, len);
 
       if (cc < 0)
-	return -1;
+        return -1;
 
       if (cc == 0)
-	break;
+        break;
 
       buf += cc;
       total+= cc;
