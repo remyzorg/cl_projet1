@@ -38,11 +38,11 @@ typedef struct
 	const char *	usage;
 } CommandEntry;
 
-
 /*
  * The table of built-in commands.
  * This is terminated wih an entry containing NULL values.
  */
+
 static const CommandEntry	commandEntryTable[] =
 {
 	{

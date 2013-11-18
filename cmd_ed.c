@@ -1111,10 +1111,10 @@ writeLines(const char * file, NUM num1, NUM num2)
 static BOOL
 printLines(NUM num1, NUM num2, BOOL expandFlag)
 {
-	const LINE *		lp;
-	const unsigned char *	cp;
-	int			ch;
-	LEN			count;
+	const LINE *	lp;
+	const char * 	cp;
+	int		ch;
+	LEN		count;
 
 	if ((num1 < 1) || (num2 > lastNum) || (num1 > num2))
 	{

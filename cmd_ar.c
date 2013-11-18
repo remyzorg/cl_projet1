@@ -35,7 +35,7 @@ typedef struct
 	int		fd;		/* file reading archive from */
 	BOOL		eof;		/* end of file has been seen */
 	BOOL		rescan;		/* rescan the header just read */
-	unsigned char *	nameTable;	/* long name table */
+	char *	nameTable;	/* long name table */
 
 	/*
 	 * Information about the current file read from the archive.
@@ -388,7 +388,7 @@ initArchive(Archive * arch)
 static BOOL
 openArchive(const char * name, Archive * arch)
 {
-	unsigned char	buf[SARMAG];
+	char	buf[SARMAG];
 	ssize_t		cc;
 
 	arch->fd = open(name, O_RDONLY);
@@ -949,7 +949,7 @@ skipMember(const Archive * arch)
 static BOOL
 writeFile(const Archive * arch, int outfd)
 {
-	unsigned char	buf[BUF_SIZE];
+	char	buf[BUF_SIZE];
 	off_t		n;
 
 	n = arch->size;

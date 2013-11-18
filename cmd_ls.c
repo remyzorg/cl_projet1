@@ -392,7 +392,7 @@ listFile(
 		strcpy(cp, modeString(mode));
 		cp += strlen(cp);
 
-		sprintf(cp, "%3d ", statBuf->st_nlink);
+		sprintf(cp, "%3d ", (int) statBuf->st_nlink);
 		cp += strlen(cp);
 
 		if (!userIdKnown || (statBuf->st_uid != userId))

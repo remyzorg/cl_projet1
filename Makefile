@@ -8,7 +8,7 @@
 # The MOUNT_TYPE definition sets the default file system type for -mount.
 #
 HAVE_GZIP		= 1
-HAVE_LINUX_ATTR		= 1
+HAVE_LINUX_ATTR		= 0
 HAVE_LINUX_MOUNT	= 1
 HAVE_BSD_MOUNT		= 0
 MOUNT_TYPE		= '"ext3"'
@@ -19,18 +19,19 @@ CFLAGS = -O3 -Wall -Wmissing-prototypes \
 	-DHAVE_LINUX_ATTR=$(HAVE_LINUX_ATTR) \
 	-DHAVE_LINUX_MOUNT=$(HAVE_LINUX_MOUNT) \
 	-DHAVE_BSD_MOUNT=$(HAVE_BSD_MOUNT) \
-	-DMOUNT_TYPE=$(MOUNT_TYPE)
+	-DMOUNT_TYPE=$(MOUNT_TYPE) \
 
-LDFLAGS = -static -s
+LDFLAGS = -s
+
 LIBS = -lz
 
 
 BINDIR = /bin
 MANDIR = /usr/man/man1
 
-
 OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
-	cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o
+        cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o
+
 
 
 sash:	$(OBJS)
