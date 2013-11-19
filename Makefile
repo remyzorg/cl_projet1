@@ -23,7 +23,7 @@ CFLAGS = -g -Wall -Wmissing-prototypes \
 
 # LDFLAGS = -s
 
-LIBS = -lz
+LIBS = -lz -lfl
 
 
 BINDIR = /bin
@@ -35,10 +35,18 @@ OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
 
 
 sash:	$(OBJS)
-	$(CC) $(LDFLAGS) -o sash $(OBJS) $(LIBS)
+	yacc -d parser.y
+	lex lexer.lex
+	$(CC) $(LDFLAGS) y.tab.c lex.yy.c -o sash $(OBJS) $(LIBS)
+
+calc.tab.c: parser.y
+	$(YACC) parser.y
+
+lex.yy.c: lexer.lex	
+	$(LEX) lexer.lex
 
 clean:
-	rm -f $(OBJS) sash
+	rm -f $(OBJS) sash y.tab.* lex.yy.*
 
 install: sash
 	cp sash $(BINDIR)/sash
