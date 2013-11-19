@@ -1,41 +1,37 @@
-%{
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
+%{ /* C declarations used in actions */
+ #include <stdio.h>
+  int yyparse();
+  int yylex();
+ void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
+ %}
 
-/* prototypes */
-%}
-
-%token <int> INTEGER
-%token <char> VARIABLE
+ /* yacc definitions */
 
 %left '+' '-'
 %left '*' '/'
+%token <a_number> INTEGER
+%union {int a_number;}
+%start expr
+ 
+%type<a_number> expr
 
-%start program
 %%
+ /*descriptions of expected inputs       corresponding actions (in C)*/
 
-program:
-        expr                { exit(0); }
+expr   :  INTEGER                         { return $1; }
+        | expr '+' expr                   {$$ = $1 + $3;}
+        | expr '-' expr                   {$$ = $1 - $3;}
+        | expr '*' expr                   {$$ = $1 * $3;}
+        | expr '/' expr                   {$$ = $1 / $3;}
+        | '(' expr ')'                    {$$ = $2;}
+        | '$' '{' expr '}'                    {$$ = $3;}
         ;
 
 
-expr:
-          INTEGER               { $$ = $1; }
-        /* | VARIABLE              { $$ = id($1); } */
-        | expr '+' expr         { $$ = $1 + $3; }
-        | expr '-' expr         { $$ = $1 - $3; }
-        | expr '*' expr         { $$ = $1 * $3; }
-        | expr '/' expr         { $$ = $1 / $3); }
-        | '(' expr ')'          { $$ = $2; }
-        ;
-%%
+ %%                        /* C code */
 
-/* int main(void) { */
-/*     yyparse(); */
-/*     return 0; */
-/* } */
+ /* int main (void) {return yyparse ( );} */
 
-void yyerror(char *s) {
-    fprintf(stdout, "%s\n", s);
-}
+
+
+

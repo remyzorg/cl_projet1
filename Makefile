@@ -30,19 +30,26 @@ BINDIR = /bin
 MANDIR = /usr/man/man1
 
 OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
-        cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o eval_upmc.o
+        cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o \
+	y.tab.o lex.yy.o eval_upmc.o
 
+lex.yy.o: lex.yy.c y.tab.h
+y.tab.c y.tab.h: parser.y
+	$(YACC) -d parser.y
 
+## this is the make rule to use lex to generate the file lex.yy.c from
+## our file calc.l
 
-sash:	$(OBJS)
-	yacc -d parser.y
-	lex lexer.lex
-	$(CC) $(LDFLAGS) y.tab.c lex.yy.c -o sash $(OBJS) $(LIBS)
+lex.yy.c: lexer.lex
+	$(LEX) lexer.lex
 
-calc.tab.c: parser.y
-	$(YACC) parser.y
+sash:	$(OBJS) y.tab.o lex.yy.o 
+	$(CC) $(LDFLAGS) -o sash $(OBJS) $(LIBS)
 
-lex.yy.c: lexer.lex	
+yacc: parser.y
+	$(YACC) -d parser.y
+
+lex: lexer.lex	
 	$(LEX) lexer.lex
 
 clean:

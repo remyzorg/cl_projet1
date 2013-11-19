@@ -2,6 +2,7 @@
 
 
 #include "sash.h"
+#include "y.tab.h"
 
 #define SIZE_STACK 100
 
@@ -75,25 +76,14 @@ int opcompare (char c1, char c2){
   else return 0;
 }
 
-int parseArithToValue (const char * arith, int size) {
+int parseArithToValue (const char * arith) {
 
-  int start = 2;
-  /* int result = 0; */
+  yy_scan_string("${5}");
+  yylex();
 
-  /* ops = (char *) malloc(SIZE_STACK); */
-  /* numbers = (char *) malloc(SIZE_STACK); */
-  
-  /* int i = 0; */
-  /* for (i = start; i < size - 1; i ++){ */
 
-  /*   if (arith[i] <  */
-    
-  /*   push(arith[i], numbers, &numbers_pt); */
-  /*   push(arith[i], ops, &ops_pt); */
-  /* } */
-  /* printf("end\n"); */
-
-  /* print_stack(numbers, numbers_pt); */
+  printf("ici result : %d\n", yyparse ());
+  yylex_destroy();
   
 
   return 0;
