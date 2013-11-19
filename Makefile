@@ -23,7 +23,7 @@ CFLAGS = -g -Wall -Wmissing-prototypes \
 
 # LDFLAGS = -s
 
-LIBS = -lz -lfl
+LIBS = -lz # -lfl
 
 
 BINDIR = /bin
@@ -32,7 +32,6 @@ MANDIR = /usr/man/man1
 OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
         cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o \
 	y.tab.o lex.yy.o eval_upmc.o
-
 
 ## this is the make rule to use lex to generate the file lex.yy.c from
 ## our file calc.l
