@@ -6,7 +6,7 @@
 
 #define SIZE_STACK 100
 
-enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, Real};
+typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, Real} kind_en;
 
 typedef struct ast_st {
   enum kind_en en;
@@ -20,6 +20,84 @@ typedef struct ast_st {
 void push (char e, char * st, int * i) ;
 int pop(char * st, int * i);
 void print_stack (char * st, int pt);
+void free_ast(ast_st* a);
+ast_st* create_int(int value);
+ast_st* create_float(double value);
+ast_st* create_node(kind_en op, ast_st* left, ast_st* right);
+
+
+void free_ast(ast_st* a) {
+
+  switch(a->en) {
+
+  case Plus:
+  case Minus:
+  case Mult:
+  case Div:
+    free_ast(a->left);
+    free_ast(a->right);
+    free(a);
+    break;
+
+  case Integer:
+  case Real:
+    free(a);
+    break;
+
+  default: break;
+  }
+
+}
+
+
+/* Creates a integer node */
+ast_st* create_int(int value) {
+  ast_st *a;
+
+  if ((a = (ast_st*) malloc(sizeof(ast_st))) == NULL) {
+    exit(1);
+  }
+
+  a->num = value;
+  a->en = Integer;
+
+  return a;
+
+}
+
+/* Creates a floating point number node */
+ast_st* create_float(double value) {
+
+  ast_st *a;
+
+  if ((a = (ast_st*) malloc(sizeof(ast_st))) == NULL) {
+    exit(1);
+  }
+
+  a->flo = value;
+  a->en = Real;
+
+  return a;
+
+} 
+
+/* Creates an ast node from the given operation and the two child nodes */
+ast_st* create_node(kind_en op, ast_st* left, ast_st* right) {
+
+  ast_st *a;
+
+  if ((a = (ast_st*) malloc(sizeof(ast_st))) == NULL) {
+    free_ast(left);
+    free_ast(right);
+    exit(1);
+  }
+
+  a->left = left;
+  a->right = right;
+  a->en = op;
+
+  return a;
+}
 
 
 
