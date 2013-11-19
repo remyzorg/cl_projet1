@@ -40,19 +40,12 @@ OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
 sash:	$(OBJS) y.tab.o lex.yy.o 
 	$(CC) $(LDFLAGS) -o sash $(OBJS) $(LIBS)
 
-
-lex.yy.o: lex.yy.c y.tab.h
-
 y.tab.c y.tab.h: parser.y
 	$(YACC) -d parser.y
 
+lex.yy.o: y.tab.h lex.yy.c 
+
 lex.yy.c: lexer.lex
-	$(LEX) lexer.lex
-
-yacc: parser.y
-	$(YACC) -d parser.y
-
-lex: lexer.lex	
 	$(LEX) lexer.lex
 
 clean:

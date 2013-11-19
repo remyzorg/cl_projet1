@@ -1,8 +1,17 @@
 %{ /* C declarations used in actions */
  #include <stdio.h>
-  int yyparse();
-  int yylex();
-  void yyerror (char *s) {printf ("Fat erreur : %s\n", s);}
+
+  extern int yyparse();
+  extern int yylex();
+  extern int yylineno;
+  extern int yytext;
+
+  void yyerror (char *s);
+
+  
+  void yyerror (char *s) {
+    fprintf (stderr, "%d: error: '%s' at '%d'\n",
+             yylineno, s, yytext);}
  %}
 
  /* yacc definitions */
@@ -20,12 +29,13 @@
 
 
 calcul:
-| '$' '{' expr '}'       { $$ = $3;}
+| '$' expr       {printf("Parser : %d", $2); return $2;}
 ;
 
+
 expr   :
-| INTEGER                { printf("Parser : %d", $1); $$ = $1;}
-| expr '+' expr          {$$ = $1 + $3;}
+| INTEGER                
+| expr '+' expr          {printf("calcuuul : %d\n", $1 + $3); $$ = $1 + $3;}
 | expr '-' expr          {$$ = $1 - $3;}
 | expr '*' expr          {$$ = $1 * $3;}
 | expr '/' expr          {$$ = $1 / $3;}

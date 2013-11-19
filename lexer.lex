@@ -1,16 +1,18 @@
 %{
 #include <stdlib.h>
 #include "y.tab.h"
+
+  extern int yyerror (const char *);
 %}
 
 %%
 
 
 [1-9][0-9]*     { yylval.number = atoi(yytext);
-                  printf ("Lexer : %d\n", atoi(yytext));
                   return INTEGER;}
+ 
 
-[-+*/(){}$] {printf ("%c\n", *yytext); return *yytext;}
+[-+*/(){}$] {return *yytext;}
 
 [ \t\n]+        ;       /* ignore whitespace */
 

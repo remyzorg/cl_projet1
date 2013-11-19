@@ -925,7 +925,7 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   int valueArith = 0;
   char * value;
   for (i = 0; i < argCount; i++ ){
-    if (argTable[i][0] == '$' && argTable[i][1] == '{'){
+    if (argTable[i][0] == '$' && argTable[i][1] == '('){
       printf("START\n");
       valueArith = parseArithToValue(argTable[i]);
       printf("result : %d\n", valueArith);
