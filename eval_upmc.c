@@ -156,15 +156,15 @@ int opcompare (char c1, char c2){
 
 int parseArithToValue (const char * arith) {
 
+  int result = 0;
 
-  printf("Eval entry : %s\n", arith);
   yy_scan_string(arith);
   yylex();
 
-
-  printf("Eval result : %d\n", yyparse ());
+  result = yyparse ();
+  
   yylex_destroy();
   
 
-  return 0;
+  return result;
 }

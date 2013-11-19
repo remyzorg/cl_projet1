@@ -41,7 +41,7 @@ sash:	$(OBJS) y.tab.o lex.yy.o
 	$(CC) $(LDFLAGS) -o sash $(OBJS) $(LIBS)
 
 y.tab.c y.tab.h: parser.y
-	$(YACC) -d parser.y
+	$(YACC) -dv parser.y
 
 lex.yy.o: y.tab.h lex.yy.c 
 

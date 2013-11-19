@@ -7,12 +7,12 @@
 
 %%
 
+[-+*/(){}$] {return *yytext;}
 
 [1-9][0-9]*     { yylval.number = atoi(yytext);
                   return INTEGER;}
  
 
-[-+*/(){}$] {return *yytext;}
 
 [ \t\n]+        ;       /* ignore whitespace */
 
