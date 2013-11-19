@@ -33,18 +33,22 @@ OBJS = sash.o cmds.o cmd_dd.o cmd_ed.o cmd_grep.o cmd_ls.o cmd_tar.o \
         cmd_gzip.o cmd_find.o cmd_file.o cmd_chattr.o cmd_ar.o utils.o \
 	y.tab.o lex.yy.o eval_upmc.o
 
-lex.yy.o: lex.yy.c y.tab.h
-y.tab.c y.tab.h: parser.y
-	$(YACC) -d parser.y
 
 ## this is the make rule to use lex to generate the file lex.yy.c from
 ## our file calc.l
 
-lex.yy.c: lexer.lex
-	$(LEX) lexer.lex
 
 sash:	$(OBJS) y.tab.o lex.yy.o 
 	$(CC) $(LDFLAGS) -o sash $(OBJS) $(LIBS)
+
+
+lex.yy.o: lex.yy.c y.tab.h
+
+y.tab.c y.tab.h: parser.y
+	$(YACC) -d parser.y
+
+lex.yy.c: lexer.lex
+	$(LEX) lexer.lex
 
 yacc: parser.y
 	$(YACC) -d parser.y

@@ -17,72 +17,16 @@ typedef struct ast_st {
   };
 } ast_st;
 
-void push (char e, char * st, int * i) ;
-int pop(char * st, int * i);
-void print_stack (char * st, int pt);
-
-
-
-char * ops;
-char * numbers;
-int ops_pt = -1;
-int numbers_pt = -1;
-
-void push (char e, char * st, int * i) {
-  if(*i==(SIZE_STACK-1))
-    {
-      printf("\n Stack overflow");
-      return;
-    }
-  else
-    {
-      st[++(*i)] = e;
-    }
-}
-
-int pop(char * st, int * i)
-{
-  if(*i==-1)
-    {
-      printf("\n Stack underflow");
-      return -1;
-    }
-  else
-    {
-      return st[(*i)--];
-    }
-}
-
-int opcompare (char c1, char c2);
-int valueop (char c);
-
-void print_stack (char * st, int pt){
-  int i = 0;
-  for (i = 0; i <= pt; i++)
-    printf("%c ", st[i]);
-}
-
-int valueop (char c){
-  if (c == '/' || c == '*')
-    return 1;
-  else return 0;
-}
-
-int opcompare (char c1, char c2){
-  if (valueop (c1) > valueop (c1))
-    return 1;
-  else if (valueop (c1) < valueop (c1))
-    return -1;
-  else return 0;
-}
 
 int parseArithToValue (const char * arith) {
 
-  yy_scan_string("${5}");
+
+  printf("Eval entry : %s\n", arith);
+  yy_scan_string(arith);
   yylex();
 
 
-  printf("ici result : %d\n", yyparse ());
+  printf("Eval result : %d\n", yyparse ());
   yylex_destroy();
   
 

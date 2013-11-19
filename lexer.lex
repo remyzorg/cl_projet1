@@ -6,10 +6,11 @@
 %%
 
 
+[1-9][0-9]*     { yylval.number = atoi(yytext);
+                  printf ("Lexer : %d\n", atoi(yytext));
+                  return INTEGER;}
 
-[1-9][0-9]* {return INTEGER;}
-
-[-()<>=+*/;{}.$] {return *yytext;}
+[-+*/(){}$] {printf ("%c\n", *yytext); return *yytext;}
 
 [ \t\n]+        ;       /* ignore whitespace */
 
