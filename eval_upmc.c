@@ -17,6 +17,7 @@ typedef struct ast_st {
   };
 } ast_st;
 
+
 void push (char e, char * st, int * i) ;
 int pop(char * st, int * i);
 void print_stack (char * st, int pt);
@@ -24,7 +25,7 @@ void free_ast(ast_st* a);
 ast_st* create_int(int value);
 ast_st* create_float(double value);
 ast_st* create_node(kind_en op, ast_st* left, ast_st* right);
-
+double eval(ast_st* ast);
 
 void free_ast(ast_st* a) {
 
@@ -99,7 +100,43 @@ ast_st* create_node(kind_en op, ast_st* left, ast_st* right) {
   return a;
 }
 
+double eval(ast_st* ast) {
 
+  double tmp1, tmp2;
+
+  switch (ast->en) {
+  case Real:
+    return ast->flo;
+    break;
+  case Integer:
+    return (double) ast->num;
+    break;
+  case Plus:
+    tmp1 = eval(ast->left);
+    tmp2 = eval(ast->right);
+    return tmp1 + tmp2;
+    break;
+  case Minus:
+    tmp1 = eval(ast->left);
+    tmp2 = eval(ast->right);
+    return tmp1 - tmp2;
+    break;
+  case Mult:
+    tmp1 = eval(ast->left);
+    tmp2 = eval(ast->right);
+    return tmp1 + tmp2;
+    break;
+  case Div:
+    tmp1 = eval(ast->left);
+    tmp2 = eval(ast->right);
+    return tmp1 + tmp2;
+    break;
+  default:
+    return 0.;
+    break;
+  }
+
+}
 
 char * ops;
 char * numbers;
