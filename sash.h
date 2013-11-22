@@ -132,7 +132,7 @@ extern	const char *	buildName
 extern	BOOL	makeArgs
 	(const char * cmd, int * argcPtr, const char *** argvPtr);
 
-extern	double	 parseArithToValue (const char * arith);
+extern	int	 parseArithToValue (const char * arith);
 
 extern	BOOL	copyFile
 	(const char * srcName, const char * destName, BOOL setModes);

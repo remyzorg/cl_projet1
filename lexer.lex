@@ -8,6 +8,8 @@
 
 %%
 
+
+
 [-+*/(){}$] {return *yytext;}
  
 [-]?[0-9]+\.[0-9]+ { yylval.dbl = atof(yytext);
@@ -15,6 +17,9 @@
 
 [-]?[0-9]*     { yylval.number = atoi(yytext);
                   return INTEGER;}
+
+([A-Z]|[_])+     { yylval.var = yytext;
+                 return VAR;}
 
 [ \t\n]+        ;       /* ignore whitespace */
 
