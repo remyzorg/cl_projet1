@@ -1,5 +1,6 @@
 %{ /* C declarations used in actions */
  #include <stdio.h>
+ #include "eval_upmc.h"
 
   extern int yyparse();
   extern int yylex();
@@ -19,10 +20,10 @@
 %left '+' '-'
 %left '*' '/'
 %token <number> INTEGER
-%union {int number;}
+%union {int number; ast_st *ast;}
 %start calcul
  
-%type<number> calcul expr
+%type <ast> calcul expr
 
 %%
  /*descriptions of expected inputs       corresponding actions (in C)*/
@@ -34,11 +35,11 @@ calcul: expr
 
 
 expr   :
-| INTEGER                
-| expr '+' expr          {$$ = $1 + $3;}
-| expr '-' expr          {$$ = $1 - $3;}
-| expr '*' expr          {$$ = $1 * $3;}
-| expr '/' expr          {$$ = $1 / $3;}
+INTEGER                {$$ = create_int($1);} 
+| expr '+' expr          {$$ = create_node(Plus, $1, $3);}
+| expr '-' expr          {$$ = create_node(Minus, $1, $3);}
+| expr '*' expr          {$$ = create_node(Mult, $1, $3);}
+| expr '/' expr          {$$ = create_node(Div, $1, $3);}
 | '(' expr ')'           {$$ = $2;}
 ;
 

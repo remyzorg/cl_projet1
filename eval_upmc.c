@@ -202,7 +202,7 @@ int opcompare (char c1, char c2){
 
 int parseArithToValue (const char * arith) {
 
-  int result = 0;
+  ast_st* result;
 
   yy_scan_string(arith);
   yylex();
@@ -212,7 +212,7 @@ int parseArithToValue (const char * arith) {
   yylex_destroy();
   
 
-  return result;
+  return eval(result);
 }
 
 

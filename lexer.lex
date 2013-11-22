@@ -1,6 +1,7 @@
 %{
 #include <stdlib.h>
 #include "y.tab.h"
+#include "eval_upmc.h"
 
   extern int yyerror (const char *);
 %}
