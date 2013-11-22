@@ -1,21 +1,27 @@
 
-
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "sash.h"
-#include "y.tab.h"
+#include "y.tab.c"
 
 #define SIZE_STACK 100
 
 typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, Real} kind_en;
 
-typedef struct ast_st {
+typedef struct ast_st ast_st;
+
+typedef struct node {
+  ast_st *left, *right;
+} node;
+
+struct ast_st {
   enum kind_en en;
   union {
-    struct ast_st *left, *right;
+    node childs;
     int num;
     double flo;
   };
-} ast_st;
+};
 
 
 void push (char e, char * st, int * i) ;
@@ -35,8 +41,8 @@ void free_ast(ast_st* a) {
   case Minus:
   case Mult:
   case Div:
-    free_ast(a->left);
-    free_ast(a->right);
+    free_ast(a->childs.left);
+    free_ast(a->childs.right);
     free(a);
     break;
 
@@ -92,9 +98,10 @@ ast_st* create_node(kind_en op, ast_st* left, ast_st* right) {
     free_ast(right);
     exit(1);
   }
+  
 
-  a->left = left;
-  a->right = right;
+  a->childs.left = left;
+  a->childs.right = right;
   a->en = op;
 
   return a;
@@ -112,23 +119,25 @@ double eval(ast_st* ast) {
     return (double) ast->num;
     break;
   case Plus:
-    tmp1 = eval(ast->left);
-    tmp2 = eval(ast->right);
+    tmp1 = eval(ast->childs.left);
+    printf("tmp1: %f\n", tmp1);
+    tmp2 = eval(ast->childs.right);
+    printf("tmp2: %f\n", tmp2);
     return tmp1 + tmp2;
     break;
   case Minus:
-    tmp1 = eval(ast->left);
-    tmp2 = eval(ast->right);
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
     return tmp1 - tmp2;
     break;
   case Mult:
-    tmp1 = eval(ast->left);
-    tmp2 = eval(ast->right);
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
     return tmp1 + tmp2;
     break;
   case Div:
-    tmp1 = eval(ast->left);
-    tmp2 = eval(ast->right);
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
     return tmp1 + tmp2;
     break;
   default:
@@ -204,4 +213,27 @@ int parseArithToValue (const char * arith) {
   
 
   return result;
+}
+
+
+int main(char **argc, int argv) {
+
+  ast_st* a = create_int(2);
+  ast_st* f = create_float(4.0);
+
+  ast_st* p = create_node(Plus, a, f);
+
+  ast_st* m = create_node(Minus, p, a);
+
+  int eva = eval(a);
+  double evf = eval(f);
+  double evp = eval(p);
+  double evm = eval(m);
+
+  printf("a: %d\n", eva);
+  printf("f: %f\n", evf);
+  printf("p=a+f: %f\n", evp);
+
+  printf("m=f-a: %f \n", evm);
+
 }
