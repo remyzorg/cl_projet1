@@ -29,4 +29,6 @@ ast_st* create_int(int value);
 ast_st* create_float(double value);
 ast_st* create_node(kind_en op, ast_st* left, ast_st* right);
 double eval(ast_st* ast);
+double parseArithToValue (const char * arith);
+
 #endif

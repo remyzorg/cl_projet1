@@ -20,7 +20,8 @@
 %left '+' '-'
 %left '*' '/'
 %token <number> INTEGER
-%union {int number; ast_st *ast;}
+%token <dbl> DOUBLE
+%union {int number; double dbl; ast_st *ast;}
 %start calcul
  
 %type <ast> calcul expr
@@ -35,7 +36,8 @@ calcul: expr
 
 
 expr   :
-INTEGER                {$$ = create_int($1);} 
+  INTEGER                {$$ = create_int($1);}
+| DOUBLE                 {$$ = create_float($1);} 
 | expr '+' expr          {$$ = create_node(Plus, $1, $3);}
 | expr '-' expr          {$$ = create_node(Minus, $1, $3);}
 | expr '*' expr          {$$ = create_node(Mult, $1, $3);}

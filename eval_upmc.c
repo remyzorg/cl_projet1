@@ -88,6 +88,7 @@ double eval(ast_st* ast) {
 
   switch (ast->en) {
   case Real:
+    printf("Get value: %f\n", ast->flo);
     return ast->flo;
     break;
   case Integer:
@@ -106,12 +107,15 @@ double eval(ast_st* ast) {
   case Mult:
     tmp1 = eval(ast->childs.left);
     tmp2 = eval(ast->childs.right);
-    return tmp1 + tmp2;
+    return tmp1 * tmp2;
     break;
   case Div:
     tmp1 = eval(ast->childs.left);
     tmp2 = eval(ast->childs.right);
-    return tmp1 + tmp2;
+    if (tmp2 == 0) {
+      printf("Division by zero\n");
+    }
+    return tmp1 / tmp2;
     break;
   default:
     return 0.;
@@ -173,7 +177,7 @@ int opcompare (char c1, char c2){
   else return 0;
 }
 
-int parseArithToValue (const char * arith) {
+double parseArithToValue (const char * arith) {
 
   ast_st* result;
   double val = 0;

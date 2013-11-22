@@ -9,11 +9,12 @@
 %%
 
 [-+*/(){}$] {return *yytext;}
-
-[1-9][0-9]*     { yylval.number = atoi(yytext);
-                  return INTEGER;}
  
+[-]?[0-9]+\.[0-9]+ { yylval.dbl = atof(yytext);
+                  return DOUBLE;}
 
+[-]?[0-9]*     { yylval.number = atoi(yytext);
+                  return INTEGER;}
 
 [ \t\n]+        ;       /* ignore whitespace */
 
