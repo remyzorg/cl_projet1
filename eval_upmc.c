@@ -16,6 +16,12 @@ void free_ast(ast_st* a) {
   case Minus:
   case Mult:
   case Div:
+  case Eq:
+  case Ne:
+  case Lt:
+  case Le:
+  case Gt:
+  case Ge:
     free_ast(a->childs.left);
     free_ast(a->childs.right);
     free(a);
@@ -116,6 +122,37 @@ double eval(ast_st* ast) {
     }
     return tmp1 / tmp2;
     break;
+  case Eq:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 == tmp2;
+    break;
+  case Ne:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 != tmp2;
+    break;
+  case Lt:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 < tmp2;
+    break;
+  case Le:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 <= tmp2;
+    break;
+  case Gt:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 > tmp2;
+    break;
+  case Ge:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 >= tmp2;
+    break;
+
   default:
     return 0.;
     break;
@@ -197,6 +234,36 @@ int parseArithToValue (const char * arith) {
 }
 
 
+int do_test (int argc, const char ** argv) {
+
+  ast_st* result;
+  int i, size = 0, val;
+  char * buffer;
+  
+  for (i=1; i<argc; i++) size += strlen(argv[i]) + 1; 
+  buffer = (char*) malloc(sizeof(char) * size);
+
+  strcat(buffer, argv[1]);
+  for (i=2; i<argc; i++) {
+    strcat(buffer, " "); 
+    strcat(buffer, argv[i]);
+  }
+  printf("result: %s...\n", buffer);
+
+  yy_scan_string(buffer);
+  yylex();
+
+  result = yyparse ();
+  val = eval(result);
+
+  free_ast(result);
+  yylex_destroy();
+
+  return val;
+
+}
+
+
 /* int main(char **argc, int argv) { */
 
 /*   ast_st* a = create_int(2); */
@@ -213,8 +280,8 @@ int parseArithToValue (const char * arith) {
 
 /*   printf("a: %d\n", eva); */
 /*   printf("f: %f\n", evf); */
-/*   printf("p=a+f: %f\n", evp); */
+/*   printf("p=a==f: %f\n", evp); */
 
-/*   printf("m=f-a: %f \n", evm); */
+/*   printf("m=f>=a: %f \n", evm); */
 
 /* } */

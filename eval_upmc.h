@@ -3,7 +3,8 @@
 #else
 
 #define _EVAL_UPMC_H_
-typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, Real} kind_en;
+typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, 
+                      Real, Eq, Lt, Le, Gt, Ge, Ne} kind_en;
 
 typedef struct ast_st ast_st;
 
@@ -20,7 +21,6 @@ struct ast_st {
   };
 };
 
-
 void push (char e, char * st, int * i) ;
 int pop(char * st, int * i);
 void print_stack (char * st, int pt);
@@ -30,5 +30,6 @@ ast_st* create_float(double value);
 ast_st* create_node(kind_en op, ast_st* left, ast_st* right);
 double eval(ast_st* ast);
 int parseArithToValue (const char * arith);
+int do_test (int arvc, const char ** argv);
 
 #endif

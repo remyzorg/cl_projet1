@@ -11,9 +11,9 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <errno.h>
-
 #include "sash.h"
 
+extern int do_test (int argc, const char ** argv);
 
 static const char * const	version = "3.7";
 
@@ -304,10 +304,17 @@ static const CommandEntry	commandEntryTable[] =
 	},
 
 	{
+		"-test",	do_test,	1,	INFINITE_ARGS,
+		"Returns the value of the test given",
+		"[args] ..."
+	},
+
+	{
 		"-touch",	do_touch,	2,	INFINITE_ARGS,
 		"Update times or create the specified files",
 		"fileName ..."
 	},
+
 
 	{
 		"umask",	do_umask,	1,	2,

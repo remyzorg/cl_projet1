@@ -12,14 +12,21 @@
 
 [-+*/(){}$] {return *yytext;}
  
-[-]?[0-9]+\.[0-9]+ { yylval.dbl = atof(yytext);
-                  return DOUBLE;}
+[-]?[0-9]+\.[0-9]+      { yylval.dbl = atof(yytext);
+                          return DOUBLE;}
 
-[-]?[0-9]*     { yylval.number = atoi(yytext);
-                  return INTEGER;}
+[-]?[0-9]*              { yylval.number = atoi(yytext);
+                          return INTEGER;}
 
-([A-Z]|[_])+     { yylval.var = yytext;
-                 return VAR;}
+([A-Z]|[_])+            { yylval.var = yytext;
+                          return VAR;}
+
+"-eq"                   { return EQ; }
+"-ne"                   { return NE; }
+"-lt"                   { return LT; }
+"-le"                   { return LE; }
+"-gt"                   { return GT; }
+"-ge"                   { return GE; }
 
 [ \t\n]+        ;       /* ignore whitespace */
 

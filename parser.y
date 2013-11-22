@@ -17,22 +17,28 @@
 
  /* yacc definitions */
 
+%left EQ NE
+%left LT LE GT GE
+
 %left '+' '-'
 %left '*' '/'
+
 %token <number> INTEGER
 %token <dbl> DOUBLE
 %token <var> VAR
+%token EQ NE LT LE GT GE
 %union {int number; double dbl; char* var; ast_st *ast;}
 %start calcul
  
-%type <ast> calcul expr
+%type <ast> calcul expr test
 
 %%
  /*descriptions of expected inputs       corresponding actions (in C)*/
 
 
-calcul: expr
-| '{' expr '}'      {return $2;}
+calcul: 
+ '{' expr '}'      {return $2;}
+| test             {return $1;}
 ;
 
 
@@ -48,6 +54,16 @@ expr   :
 | expr '/' expr          {$$ = create_node(Div, $1, $3);}
 | '(' expr ')'           {$$ = $2;}
 ;
+
+test:
+INTEGER                  {$$ = create_int($1);}
+| test EQ test           {$$ = create_node(Eq, $1, $3);}
+| test NE test           {$$ = create_node(Ne, $1, $3);}
+| test LT test           {$$ = create_node(Lt, $1, $3);}
+| test LE test           {$$ = create_node(Le, $1, $3);}
+| test GT test           {$$ = create_node(Gt, $1, $3);}
+| test GE test           {$$ = create_node(Ge, $1, $3);}
+| '(' test ')'           {$$ = $2;}
 
 
 %%                        /* C code */

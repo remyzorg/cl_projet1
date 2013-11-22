@@ -929,28 +929,22 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   int i;
   int valueArith = 0.0;
   char * value;
-  /* for (i = 0; i < argCount; i++ ){ */
-  /* } */
-
-
   
   for (i = 0; i < argCount; i++ ){
+
     if (argTable[i][0] == '$' && argTable[i][1] == '{'){
       valueArith = parseArithToValue(argTable[i]);
       sprintf((char *)argTable[i], "%d", valueArith);
+
     } else if (argTable[i][0] == '$'){
       value = getenv(argTable[i] + 1);
       argTable[i] = value ? value : "";
     }
+    
   }
 
-   
-
-
-  
   *retArgc = argCount;
   *retArgv = argTable;
-
   
   return TRUE;
 }
