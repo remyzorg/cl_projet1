@@ -660,6 +660,7 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   int			len;
   int			ch;
   int			quote;
+  int                   var;
   BOOL			quotedWildCards;
   BOOL			unquotedWildCards;
 
@@ -721,6 +722,7 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
        * Reset quoting and wildcarding for this argument.
        */
       quote = '\0';
+      var = '\0';
       quotedWildCards = FALSE;
       unquotedWildCards = FALSE;
 
@@ -779,11 +781,14 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
            */
           if (isWildCard(ch))
             {
-              if (quote)
+              if (quote || var)
                 quotedWildCards = TRUE;
               else
                 unquotedWildCards = TRUE;
             }
+
+          /* Useful in case of a wildcard. If in a var, we don't expand it */
+          if (ch == '$') var = ch;
 
           /*
            * If we were in a quote and we saw the same quote
