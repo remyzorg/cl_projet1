@@ -88,7 +88,6 @@ double eval(ast_st* ast) {
 
   switch (ast->en) {
   case Real:
-    printf("Get value: %f\n", ast->flo);
     return ast->flo;
     break;
   case Integer:

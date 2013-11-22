@@ -925,18 +925,15 @@ makeArgs(const char * cmd, int * retArgc, const char *** retArgv)
   double valueArith = 0.0;
   char * value;
   for (i = 0; i < argCount; i++ ){
-    if (argTable[i][0] == '$' && argTable[i][1] == '{'){
-      printf("START\n");
-      valueArith = parseArithToValue(argTable[i]);
-      printf("result : %f\n", valueArith);
-      /* sprintf("%d", valueArith); */
-    }
   }
 
 
   
   for (i = 0; i < argCount; i++ ){
-    if (argTable[i][0] == '$'){
+    if (argTable[i][0] == '$' && argTable[i][1] == '{'){
+      valueArith = parseArithToValue(argTable[i]);
+      sprintf((char *)argTable[i], "%f", valueArith);
+    } else if (argTable[i][0] == '$'){
       value = getenv(argTable[i] + 1);
       argTable[i] = value ? value : "";
     }
