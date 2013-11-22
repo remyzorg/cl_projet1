@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "sash.h"
-#include "y.tab.c"
+#include "y.tab.h"
 
 #define SIZE_STACK 100
 
@@ -216,24 +216,24 @@ int parseArithToValue (const char * arith) {
 }
 
 
-int main(char **argc, int argv) {
+/* int main(char **argc, int argv) { */
 
-  ast_st* a = create_int(2);
-  ast_st* f = create_float(4.0);
+/*   ast_st* a = create_int(2); */
+/*   ast_st* f = create_float(4.0); */
 
-  ast_st* p = create_node(Plus, a, f);
+/*   ast_st* p = create_node(Plus, a, f); */
 
-  ast_st* m = create_node(Minus, p, a);
+/*   ast_st* m = create_node(Minus, p, a); */
 
-  int eva = eval(a);
-  double evf = eval(f);
-  double evp = eval(p);
-  double evm = eval(m);
+/*   int eva = eval(a); */
+/*   double evf = eval(f); */
+/*   double evp = eval(p); */
+/*   double evm = eval(m); */
 
-  printf("a: %d\n", eva);
-  printf("f: %f\n", evf);
-  printf("p=a+f: %f\n", evp);
+/*   printf("a: %d\n", eva); */
+/*   printf("f: %f\n", evf); */
+/*   printf("p=a+f: %f\n", evp); */
 
-  printf("m=f-a: %f \n", evm);
+/*   printf("m=f-a: %f \n", evm); */
 
-}
+/* } */
