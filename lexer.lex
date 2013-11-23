@@ -23,7 +23,7 @@
 
 "-eq"                   { return EQ; }
 "-ne"                   { return NE; }
-"-lt"                   { return LT; }
+"-lt"                   { printf("%s\n", yytext); return LT; }
 "-le"                   { return LE; }
 "-gt"                   { return GT; }
 "-ge"                   { return GE; }

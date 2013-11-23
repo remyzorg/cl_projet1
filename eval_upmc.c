@@ -233,31 +233,106 @@ int parseArithToValue (const char * arith) {
   return val;
 }
 
+int is_op(const char* val) {
+  return !strcmp(val, "-lt") || !strcmp(val, "-le") || !strcmp(val,"-gt") ||
+    !strcmp(val, "-ge") || !strcmp(val, "-eq") || !strcmp(val, "-ne");
+}
+
+kind_en get_op(const char* op) {
+  if (!strcmp(op, "-lt")) return Lt;
+  else if (!strcmp(op, "-le")) return Le;
+  else if (!strcmp(op, "-gt")) return Gt;
+  else if (!strcmp(op, "-ge")) return Ge;
+  else if (!strcmp(op, "-eq")) return Eq;
+  else if (!strcmp(op, "-ne")) return Ne;
+  else return Nothing;
+}
+
+ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
+
+  ast_st *tmp1, *tmp2;
+  kind_en op = Nothing;
+  int i;
+
+  printf("argc: %d\n", argc);
+
+  for (i = 0; i < argc; i++) {
+
+    printf("arg: %s, i: %d\n", argv[i], i);
+
+    if (!strcmp(argv[i],"(")) {
+      printf("Par !\n");
+      tmp2 = eval_args(argc-i, argv+i+1, 1, index);
+      if (tmp2 == NULL) return NULL;
+      printf("i:%d, index: %d\n", i, *index);
+      i += *index;
+    }
+    else if (!strcmp(argv[i], ")"))
+      if (par) {
+        *index = i+1;
+        return tmp1;
+      }
+      else {
+        printf("Closing parenthesis unmatched\n");
+        return NULL;
+      }
+
+    else if (is_op(argv[i])) { 
+      printf("Op !\n");
+      op = get_op(argv[i]);
+    }
+
+    else {
+      int val = !strcmp(argv[i], "") ? 0 : atoi(argv[i]);
+      tmp2 = create_int(val);
+      
+      if (op != Nothing) {
+        tmp1 = create_node(op, tmp1, tmp2);
+        op = Nothing;
+      } else tmp1 = tmp2;
+    }
+  }
+
+  if (!par)
+    return tmp1;
+  else {
+    printf("Opening parenthesis unmatched\n");
+    return NULL;
+  }
+}
+
 
 int do_test (int argc, const char ** argv) {
 
   ast_st* result;
-  int i, size = 0, val;
-  char * buffer;
+  int *i, val;
+  /* char * buffer; */
   
-  for (i=1; i<argc; i++) size += strlen(argv[i]) + 1; 
-  buffer = (char*) malloc(sizeof(char) * size);
+  /* for (i=1; i<argc; i++) size += strlen(argv[i]) + 1;  */
+  /* buffer = (char*) malloc(sizeof(char) * size); */
 
-  strcat(buffer, argv[1]);
-  for (i=2; i<argc; i++) {
-    strcat(buffer, " "); 
-    strcat(buffer, argv[i]);
-  }
-  printf("result: %s...\n", buffer);
+  /* strcat(buffer, argv[1]); */
+  /* for (i=2; i<argc; i++) { */
+  /*   strcat(buffer, " ");  */
+  /*   strcat(buffer, argv[i]); */
+  /* } */
+  /* printf("result: %s...\n", buffer); */
 
-  yy_scan_string(buffer);
-  yylex();
+  /* yy_scan_string(buffer); */
+  /* yylex(); */
 
-  result = yyparse ();
+  /* result = yyparse (); */
+  result = eval_args(argc-1, argv+1, 0, i);
+
+  if (result == NULL) return 0;
+
   val = eval(result);
 
+  printf("%d\n", val);
+
   free_ast(result);
-  yylex_destroy();
+  /* free(buffer); */
+  /* yylex_destroy(); */
 
   return val;
 

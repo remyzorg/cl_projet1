@@ -37,8 +37,8 @@
 
 
 calcul: 
- '{' expr '}'      {return $2;}
-| test             {return $1;}
+'{' expr '}'      {printf ("expr\n"); return $2;}
+| test             {printf("test\n"); return $1;}
 ;
 
 
@@ -56,7 +56,7 @@ expr   :
 ;
 
 test:
-INTEGER                  {$$ = create_int($1);}
+INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
 | test EQ test           {$$ = create_node(Eq, $1, $3);}
 | test NE test           {$$ = create_node(Ne, $1, $3);}
 | test LT test           {$$ = create_node(Lt, $1, $3);}
