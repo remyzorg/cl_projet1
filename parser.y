@@ -66,7 +66,7 @@ INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
 | test GT test           {$$ = create_node(Gt, $1, $3);}
 | test GE test           {$$ = create_node(Ge, $1, $3);}
 | '(' test ')'           {$$ = $2;}
-
+;
 
 %%                        /* C code */
 
