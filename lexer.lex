@@ -1,4 +1,11 @@
 %{
+  /*
+    Authors:
+    Remy El Sibaïe <remybesognet@gmail.com> 
+    Pierrick Couderc <pierrick.couderc@gmail.com>
+        students at Université Pierre et Marie Curie
+
+   */
 #include <stdlib.h>
 #include "eval_upmc.h"
 #include "y.tab.h"
@@ -15,18 +22,18 @@
 [-]?[0-9]+\.[0-9]+      { yylval.dbl = atof(yytext);
                           return DOUBLE;}
 
-[-]?[0-9]*              { printf("Lex: %s\n", yytext); yylval.number = atoi(yytext);
+[-]?[0-9]*              { yylval.number = atoi(yytext);
                           return INTEGER;}
 
 ([A-Z]|[_])+            { yylval.var = yytext;
                           return VAR;}
 
-"-test"                 { printf("Lex: -test\n"); return TEST; }
+"-test"                 { return TEST; }
 "-a"                    { return AND; }
 "-o"                    { return OR; }
 "-eq"                   { return EQ; }
 "-ne"                   { return NE; }
-"-lt"                   { printf("%s\n", yytext); return LT; }
+"-lt"                   { return LT; }
 "-le"                   { return LE; }
 "-gt"                   { return GT; }
 "-ge"                   { return GE; }

@@ -1,3 +1,12 @@
+
+  /*
+    Authors:
+    Remy El Sibaïe <remybesognet@gmail.com> 
+    Pierrick Couderc <pierrick.couderc@gmail.com>
+        students at Université Pierre et Marie Curie
+
+   */
+
 #ifdef _EVAL_UPMC_H_
 
 #else

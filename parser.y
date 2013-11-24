@@ -1,3 +1,12 @@
+
+  /*
+    Authors:
+    Remy El Sibaïe <remybesognet@gmail.com> 
+    Pierrick Couderc <pierrick.couderc@gmail.com>
+        students at Université Pierre et Marie Curie
+
+   */
+
 %{ /* C declarations used in actions */
  #include <stdio.h>
  #include "eval_upmc.h"
@@ -39,8 +48,8 @@
 
 
 calcul: 
- '{' expr '}'          {printf ("expr\n"); result = $2;}
-| TEST test             {printf("test\n"); result = $2;}
+ '{' expr '}'          {result = $2;}
+| test             {result = $1;}
 ;
 
 
@@ -58,15 +67,15 @@ expr   :
 ;
 
 test:
- INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
-| test AND test          {printf("Test and\n"); $$ = create_node(And, $1, $3);}
-| test OR test           {printf("Test or\n"); $$ = create_node(Or, $1, $3);}
-| test EQ test           {printf("Test eq\n"); $$ = create_node(Eq, $1, $3);}
-| test NE test           {printf("Test ne\n"); $$ = create_node(Ne, $1, $3);}
-| test LT test           {printf("Test lt\n"); $$ = create_node(Lt, $1, $3);}
-| test LE test           {printf("Test le\n"); $$ = create_node(Le, $1, $3);}
-| test GT test           {printf("Test gt\n"); $$ = create_node(Gt, $1, $3);}
-| test GE test           {printf("Test ge\n"); $$ = create_node(Ge, $1, $3);}
+ INTEGER                  { $$ = create_int($1);}
+| test AND test          { $$ = create_node(And, $1, $3);}
+| test OR test           { $$ = create_node(Or, $1, $3);}
+| test EQ test           { $$ = create_node(Eq, $1, $3);}
+| test NE test           { $$ = create_node(Ne, $1, $3);}
+| test LT test           { $$ = create_node(Lt, $1, $3);}
+| test LE test           { $$ = create_node(Le, $1, $3);}
+| test GT test           { $$ = create_node(Gt, $1, $3);}
+| test GE test           { $$ = create_node(Ge, $1, $3);}
 | '(' test ')'           {$$ = $2;}
 ;
 

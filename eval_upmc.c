@@ -1,4 +1,12 @@
 
+  /*
+    Authors:
+    Remy El Sibaïe <remybesognet@gmail.com> 
+    Pierrick Couderc <pierrick.couderc@gmail.com>
+        students at Université Pierre et Marie Curie
+
+   */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "sash.h"
@@ -263,23 +271,24 @@ kind_en get_op(const char* op) {
   else return Nothing;
 }
 
+/* Eval the args given to -test and computes the function, unused */
 ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
 
   ast_st *tmp1, *tmp2;
   kind_en op = Nothing;
   int i;
 
-  printf("argc: %d\n", argc);
+  /* printf("argc: %d\n", argc); */
 
   for (i = 0; i < argc; i++) {
 
-    printf("arg: %s, i: %d\n", argv[i], i);
+    /* printf("arg: %s, i: %d\n", argv[i], i); */
 
     if (!strcmp(argv[i],"(")) {
-      printf("Par !\n");
+      /* printf("Par !\n"); */
       tmp2 = eval_args(argc-i, argv+i+1, 1, index);
       if (tmp2 == NULL) return NULL;
-      printf("i:%d, index: %d\n", i, *index);
+      /* printf("i:%d, index: %d\n", i, *index); */
       i += *index;
     }
     else if (!strcmp(argv[i], ")"))
@@ -293,7 +302,7 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
       }
 
     else if (is_op(argv[i])) { 
-      printf("Op !\n");
+      /* printf("Op !\n"); */
       op = get_op(argv[i]);
     }
 
@@ -319,35 +328,25 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
 /* Does the action for the -test command */
 void do_test (int argc, const char ** argv) {
 
-  ast_st* result;
   int i, val, size = 0;
   char * buffer;
   
   for (i=0; i<argc; i++) size += strlen(argv[i]) + 1;
   buffer = (char*) malloc(sizeof(char) * size);
 
-  strcat(buffer, argv[0]);
+  strcpy(buffer, argv[0]);
   for (i=1; i<argc; i++) {
     strcat(buffer, " ");
     strcat(buffer, argv[i]);
   }
-  /* printf("result: %s...\n", buffer); */
-
-  /* char c = buffer[0]; */
-  /* i = 0; */
-  /* while(c != '\0'){ */
-  /*   printf("c: %d -> %c\n", c, c); */
-  /*   i++; */
-  /*   c = buffer[i]; */
-  /* } */
-
+  
   yy_scan_string(buffer);
   yylex();
 
-  /* result =  */yyparse ();
-  /* result = eval_args(argc-1, argv+1, 0, i); */
 
-  /* if (result == NULL) return 0; */
+  yyparse ();
+
+  if (result == NULL) return;
 
   val = eval(result);
 
@@ -356,8 +355,6 @@ void do_test (int argc, const char ** argv) {
   free_ast(result);
   free(buffer);
   yylex_destroy();
-
-  /* return val; */
 
 }
 
