@@ -21,6 +21,9 @@
 ([A-Z]|[_])+            { yylval.var = yytext;
                           return VAR;}
 
+"-test"                 { return TEST; }
+"-a"                    { return AND; }
+"-o"                    { return OR; }
 "-eq"                   { return EQ; }
 "-ne"                   { return NE; }
 "-lt"                   { printf("%s\n", yytext); return LT; }

@@ -302,39 +302,39 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
 }
 
 
-int do_test (int argc, const char ** argv) {
+void do_test (int argc, const char ** argv) {
 
   ast_st* result;
-  int *i, val;
-  /* char * buffer; */
+  int i, val, size = 0;
+  char * buffer;
   
-  /* for (i=1; i<argc; i++) size += strlen(argv[i]) + 1;  */
-  /* buffer = (char*) malloc(sizeof(char) * size); */
+  for (i=0; i<argc; i++) size += strlen(argv[i]) + 1;
+  buffer = (char*) malloc(sizeof(char) * size);
 
-  /* strcat(buffer, argv[1]); */
-  /* for (i=2; i<argc; i++) { */
-  /*   strcat(buffer, " ");  */
-  /*   strcat(buffer, argv[i]); */
-  /* } */
-  /* printf("result: %s...\n", buffer); */
+  strcat(buffer, argv[0]);
+  for (i=1; i<argc; i++) {
+    strcat(buffer, " ");
+    strcat(buffer, argv[i]);
+  }
+  printf("result: %s...\n", buffer);
 
-  /* yy_scan_string(buffer); */
-  /* yylex(); */
+  yy_scan_string(buffer);
+  yylex();
 
-  /* result = yyparse (); */
-  result = eval_args(argc-1, argv+1, 0, i);
+  result = yyparse ();
+  /* result = eval_args(argc-1, argv+1, 0, i); */
 
-  if (result == NULL) return 0;
+  /* if (result == NULL) return 0; */
 
   val = eval(result);
 
   printf("%d\n", val);
 
   free_ast(result);
-  /* free(buffer); */
-  /* yylex_destroy(); */
+  free(buffer);
+  yylex_destroy();
 
-  return val;
+  /* return val; */
 
 }
 

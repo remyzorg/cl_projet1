@@ -4,7 +4,7 @@
 
 #define _EVAL_UPMC_H_
 typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, 
-                      Real, Eq, Lt, Le, Gt, Ge, Ne} kind_en;
+                      Real, Eq, Lt, Le, Gt, Ge, Ne, And, Or} kind_en;
 
 typedef struct ast_st ast_st;
 
@@ -30,6 +30,9 @@ ast_st* create_float(double value);
 ast_st* create_node(kind_en op, ast_st* left, ast_st* right);
 double eval(ast_st* ast);
 int parseArithToValue (const char * arith);
-int do_test (int arvc, const char ** argv);
+int is_op(const char* val);
+kind_en get_op(const char* op);
+ast_st* eval_args(int argc, const char ** argv, int par, int * index);
+void do_test (int arvc, const char ** argv);
 
 #endif

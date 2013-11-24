@@ -11,12 +11,12 @@
 
   
   void yyerror (char *s) {
-    fprintf (stderr, "Error: '%s' at '%s'\n",
-             s, yytext);}
+    fprintf (stderr, "Error: '%s' at '%s'\n", s, yytext);}
  %}
 
  /* yacc definitions */
 
+%left AND OR
 %left EQ NE
 %left LT LE GT GE
 
@@ -26,7 +26,7 @@
 %token <number> INTEGER
 %token <dbl> DOUBLE
 %token <var> VAR
-%token EQ NE LT LE GT GE
+%token EQ NE LT LE GT GE AND OR TEST
 %union {int number; double dbl; char* var; ast_st *ast;}
 %start calcul
  
@@ -38,7 +38,7 @@
 
 calcul: 
 '{' expr '}'      {printf ("expr\n"); return $2;}
-| test             {printf("test\n"); return $1;}
+| TEST test             {printf("test\n"); return $2;}
 ;
 
 
@@ -57,6 +57,8 @@ expr   :
 
 test:
 INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
+| test AND test           {$$ = create_node(And, $1, $3);}
+| test OR test           {$$ = create_node(Or, $1, $3);}
 | test EQ test           {$$ = create_node(Eq, $1, $3);}
 | test NE test           {$$ = create_node(Ne, $1, $3);}
 | test LT test           {$$ = create_node(Lt, $1, $3);}
