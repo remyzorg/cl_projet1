@@ -180,73 +180,72 @@ double eval(ast_st* ast) {
 
 }
 
-char * ops;
-char * numbers;
-int ops_pt = -1;
-int numbers_pt = -1;
+/** Unused features **/
 
-void push (char e, char * st, int * i) {
-  if(*i==(SIZE_STACK-1))
-    {
-      printf("\n Stack overflow");
-      return;
-    }
-  else
-    {
-      st[++(*i)] = e;
-    }
-}
+/* char * ops; */
+/* char * numbers; */
+/* int ops_pt = -1; */
+/* int numbers_pt = -1; */
 
-int pop(char * st, int * i)
-{
-  if(*i==-1)
-    {
-      printf("\n Stack underflow");
-      return -1;
-    }
-  else
-    {
-      return st[(*i)--];
-    }
-}
+/* void push (char e, char * st, int * i) { */
+/*   if(*i==(SIZE_STACK-1)) */
+/*     { */
+/*       printf("\n Stack overflow"); */
+/*       return; */
+/*     } */
+/*   else */
+/*     { */
+/*       st[++(*i)] = e; */
+/*     } */
+/* } */
 
-int opcompare (char c1, char c2);
-int valueop (char c);
+/* int pop(char * st, int * i) */
+/* { */
+/*   if(*i==-1) */
+/*     { */
+/*       printf("\n Stack underflow"); */
+/*       return -1; */
+/*     } */
+/*   else */
+/*     { */
+/*       return st[(*i)--]; */
+/*     } */
+/* } */
 
-void print_stack (char * st, int pt){
-  int i = 0;
-  for (i = 0; i <= pt; i++)
-    printf("%c ", st[i]);
-}
+/* int opcompare (char c1, char c2); */
+/* int valueop (char c); */
 
-int valueop (char c){
-  if (c == '/' || c == '*')
-    return 1;
-  else return 0;
-}
+/* void print_stack (char * st, int pt){ */
+/*   int i = 0; */
+/*   for (i = 0; i <= pt; i++) */
+/*     printf("%c ", st[i]); */
+/* } */
 
-int opcompare (char c1, char c2){
-  if (valueop (c1) > valueop (c1))
-    return 1;
-  else if (valueop (c1) < valueop (c1))
-    return -1;
-  else return 0;
-}
+/* int valueop (char c){ */
+/*   if (c == '/' || c == '*') */
+/*     return 1; */
+/*   else return 0; */
+/* } */
+
+/* int opcompare (char c1, char c2){ */
+/*   if (valueop (c1) > valueop (c1)) */
+/*     return 1; */
+/*   else if (valueop (c1) < valueop (c1)) */
+/*     return -1; */
+/*   else return 0; */
+/* } */
 
 /* Takes a "${<calculus>}" and render the value associated */
 int parseArithToValue (const char * arith) {
 
-  /* ast_st* result; */
   int val = 0;
 
   yy_scan_string(arith);
   yylex();
 
-  /* result =  */yyparse ();
+  yyparse ();
   
   val = eval(result);
-  /* printf("%f\n", val); */
-
   free_ast(result);
   yylex_destroy();
   
@@ -278,17 +277,12 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
   kind_en op = Nothing;
   int i;
 
-  /* printf("argc: %d\n", argc); */
-
   for (i = 0; i < argc; i++) {
 
-    /* printf("arg: %s, i: %d\n", argv[i], i); */
-
     if (!strcmp(argv[i],"(")) {
-      /* printf("Par !\n"); */
+
       tmp2 = eval_args(argc-i, argv+i+1, 1, index);
       if (tmp2 == NULL) return NULL;
-      /* printf("i:%d, index: %d\n", i, *index); */
       i += *index;
     }
     else if (!strcmp(argv[i], ")"))
@@ -302,7 +296,6 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
       }
 
     else if (is_op(argv[i])) { 
-      /* printf("Op !\n"); */
       op = get_op(argv[i]);
     }
 
