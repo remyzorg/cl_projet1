@@ -15,13 +15,13 @@
 [-]?[0-9]+\.[0-9]+      { yylval.dbl = atof(yytext);
                           return DOUBLE;}
 
-[-]?[0-9]*              { yylval.number = atoi(yytext);
+[-]?[0-9]*              { printf("Lex: %s\n", yytext); yylval.number = atoi(yytext);
                           return INTEGER;}
 
 ([A-Z]|[_])+            { yylval.var = yytext;
                           return VAR;}
 
-"-test"                 { return TEST; }
+"-test"                 { printf("Lex: -test\n"); return TEST; }
 "-a"                    { return AND; }
 "-o"                    { return OR; }
 "-eq"                   { return EQ; }
@@ -33,7 +33,7 @@
 
 [ \t\n]+        ;       /* ignore whitespace */
 
-.               yyerror("Unknown character");
+.               {printf("%s\n", yytext); yyerror("Unknown character");}
 
 %%
 

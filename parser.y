@@ -10,6 +10,7 @@
 
   void yyerror (char *s);
 
+  ast_st* result = NULL;
   
   void yyerror (char *s) {
     fprintf (stderr, "Error: '%s' at '%s'\n", s, yytext);}
@@ -38,13 +39,13 @@
 
 
 calcul: 
-'{' expr '}'            {printf ("expr\n"); return $2;}
-| TEST test             {printf("test\n"); return $2;}
+ '{' expr '}'          {printf ("expr\n"); result = $2;}
+| TEST test             {printf("test\n"); result = $2;}
 ;
 
 
 expr   :
-  INTEGER                {$$ = create_int($1);}
+ INTEGER                {$$ = create_int($1);}
 | DOUBLE                 {$$ = create_float($1);} 
 | '$' VAR                { char* r = getenv($2);
                            int i = r==NULL?0:atoi(r);
@@ -57,7 +58,7 @@ expr   :
 ;
 
 test:
-INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
+ INTEGER                  {printf("%d\n", $1); $$ = create_int($1);}
 | test AND test          {printf("Test and\n"); $$ = create_node(And, $1, $3);}
 | test OR test           {printf("Test or\n"); $$ = create_node(Or, $1, $3);}
 | test EQ test           {printf("Test eq\n"); $$ = create_node(Eq, $1, $3);}

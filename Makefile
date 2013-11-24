@@ -14,7 +14,7 @@ HAVE_BSD_MOUNT		= 0
 MOUNT_TYPE		= '"ext3"'
 
 # CC = g++
-CFLAGS = -g -Wall -Wmissing-prototypes \
+CFLAGS = -g -Wmissing-prototypes \
 	-DHAVE_GZIP=$(HAVE_GZIP) \
 	-DHAVE_LINUX_ATTR=$(HAVE_LINUX_ATTR) \
 	-DHAVE_LINUX_MOUNT=$(HAVE_LINUX_MOUNT) \

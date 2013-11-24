@@ -228,13 +228,13 @@ int opcompare (char c1, char c2){
 /* Takes a "${<calculus>}" and render the value associated */
 int parseArithToValue (const char * arith) {
 
-  ast_st* result;
+  /* ast_st* result; */
   int val = 0;
 
   yy_scan_string(arith);
   yylex();
 
-  result = yyparse ();
+  /* result =  */yyparse ();
   
   val = eval(result);
   /* printf("%f\n", val); */
@@ -331,12 +331,20 @@ void do_test (int argc, const char ** argv) {
     strcat(buffer, " ");
     strcat(buffer, argv[i]);
   }
-  printf("result: %s...\n", buffer);
+  /* printf("result: %s...\n", buffer); */
+
+  /* char c = buffer[0]; */
+  /* i = 0; */
+  /* while(c != '\0'){ */
+  /*   printf("c: %d -> %c\n", c, c); */
+  /*   i++; */
+  /*   c = buffer[i]; */
+  /* } */
 
   yy_scan_string(buffer);
   yylex();
 
-  result = yyparse ();
+  /* result =  */yyparse ();
   /* result = eval_args(argc-1, argv+1, 0, i); */
 
   /* if (result == NULL) return 0; */
