@@ -1,0 +1,40 @@
+Authors:
+Remy El Sibaïe <remybesognet@gmail.com> 
+Pierrick Couderc <pierrick.couderc@gmail.com>
+    students at Université Pierre et Marie Curie
+
+Question 4: Our AST will look like the one from the courses sligthly changed,
+extended with more operations, to use arithmetic comparators. the structure is:
+
+typedef enum kind_en {Nothing, Plus, Minus, Mult, Div, Integer, 
+                      Real, Eq, Lt, Le, Gt, Ge, Ne, And, Or} kind_en;
+
+typedef struct ast_st ast_st;
+
+typedef struct node {
+  ast_st *left, *right;
+} node;
+
+struct ast_st {
+  enum kind_en en;
+  union {
+    node childs;
+    int num;
+    double flo;
+  };
+};
+
+We use an inner struct to represent the left and right sud nodes because of the
+union. To create this AST, we wrote a parser (in parser.y and lexer.lex), and
+some functions to allocate ASTs and deallocate, and an eval function.
+
+The principal error case is the division by 0, since the parser will verify the
+syntactic errors. For the division, in case of a/0, GCC will transform it intp
+"inf", which we will keep since it can be considered as a correct limit (and
+because C lacks a good exception system), and by printing a message to warn
+about this division by zero.
+
+Question 6: For the test, we created a do_test function that takes the
+arguments, recreates a string and parses it. This is more efficient since it
+will deal with syntactic errors. It is also more efficient for the operators
+priority.

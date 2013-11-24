@@ -8,6 +8,7 @@
 
 #define SIZE_STACK 100
 
+/* Releases the memory allocated for the AST and its subnodes */
 void free_ast(ast_st* a) {
 
   switch(a->en) {
@@ -88,6 +89,7 @@ ast_st* create_node(kind_en op, ast_st* left, ast_st* right) {
   return a;
 }
 
+/* Evaluates an AST to render its corresponding value */
 double eval(ast_st* ast) {
 
   double tmp1, tmp2;
@@ -152,7 +154,17 @@ double eval(ast_st* ast) {
     tmp2 = eval(ast->childs.right);
     return tmp1 >= tmp2;
     break;
-
+  case And:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 && tmp2;
+    break;
+  case Or:
+    tmp1 = eval(ast->childs.left);
+    tmp2 = eval(ast->childs.right);
+    return tmp1 || tmp2;
+    break;
+      
   default:
     return 0.;
     break;
@@ -213,6 +225,7 @@ int opcompare (char c1, char c2){
   else return 0;
 }
 
+/* Takes a "${<calculus>}" and render the value associated */
 int parseArithToValue (const char * arith) {
 
   ast_st* result;
@@ -233,11 +246,13 @@ int parseArithToValue (const char * arith) {
   return val;
 }
 
+/* Returns if the char* given corresponds to an operator */
 int is_op(const char* val) {
   return !strcmp(val, "-lt") || !strcmp(val, "-le") || !strcmp(val,"-gt") ||
     !strcmp(val, "-ge") || !strcmp(val, "-eq") || !strcmp(val, "-ne");
 }
 
+/* Returns the operator that matches the char* given */
 kind_en get_op(const char* op) {
   if (!strcmp(op, "-lt")) return Lt;
   else if (!strcmp(op, "-le")) return Le;
@@ -301,7 +316,7 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
   }
 }
 
-
+/* Does the action for the -test command */
 void do_test (int argc, const char ** argv) {
 
   ast_st* result;
@@ -342,21 +357,23 @@ void do_test (int argc, const char ** argv) {
 /* int main(char **argc, int argv) { */
 
 /*   ast_st* a = create_int(2); */
-/*   ast_st* f = create_float(4.0); */
+/*   ast_st* b = create_int(3); */
 
-/*   ast_st* p = create_node(Plus, a, f); */
-
-/*   ast_st* m = create_node(Minus, p, a); */
+/*   ast_st* p = create_node(Eq, a, b); */
+/*   ast_st* m = create_node(Lt, a, b); */
+/*   ast_st* o = create_node(Or, p, m); */
 
 /*   int eva = eval(a); */
-/*   double evf = eval(f); */
-/*   double evp = eval(p); */
-/*   double evm = eval(m); */
+/*   int evb = eval(b); */
+/*   int evp = eval(p); */
+/*   int evm = eval(m); */
+/*   int evo = eval(o); */
 
 /*   printf("a: %d\n", eva); */
-/*   printf("f: %f\n", evf); */
-/*   printf("p=a==f: %f\n", evp); */
+/*   printf("b: %d\n", evb); */
+/*   printf("p=a==b: %d\n", evp); */
 
-/*   printf("m=f>=a: %f \n", evm); */
+/*   printf("m=a<=b: %d \n", evm); */
+/*   printf("o=p or m: %d\n", evo); */
 
 /* } */
