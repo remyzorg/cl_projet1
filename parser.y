@@ -48,7 +48,7 @@
 
 
 calcul: 
- '{' expr '}'          {result = $2;}
+ '[' expr ']'          {result = $2;}
 | test             {result = $1;}
 ;
 

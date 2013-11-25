@@ -17,7 +17,7 @@
 
 
 
-[-+*/(){}$]             {return *yytext;}
+[-+*/(){}$\[\]]             {return *yytext;}
  
 [-]?[0-9]+\.[0-9]+      { yylval.dbl = atof(yytext);
                           return DOUBLE;}
