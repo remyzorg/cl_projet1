@@ -319,7 +319,7 @@ ast_st* eval_args(int argc, const char ** argv, int par, int * index) {
 }
 
 /* Does the action for the -test command */
-void do_test (int argc, const char ** argv) {
+int do_test (int argc, const char ** argv) {
 
   int i, val, size = 0;
   char * buffer;
@@ -343,12 +343,13 @@ void do_test (int argc, const char ** argv) {
 
   val = eval(result);
 
-  printf("%d\n", val);
+  /* printf("%d\n", val); */
 
   free_ast(result);
   free(buffer);
   yylex_destroy();
 
+  return val;
 }
 
 

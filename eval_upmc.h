@@ -42,7 +42,7 @@ int parseArithToValue (const char * arith);
 int is_op(const char* val);
 kind_en get_op(const char* op);
 ast_st* eval_args(int argc, const char ** argv, int par, int * index);
-void do_test (int arvc, const char ** argv);
+int do_test (int arvc, const char ** argv);
 
 extern ast_st *result;
 

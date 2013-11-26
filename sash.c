@@ -13,7 +13,7 @@
 #include <errno.h>
 #include "sash.h"
 
-extern int do_test (int argc, const char ** argv);
+extern void do_test (int argc, const char ** argv);
 
 static const char * const	version = "3.7";
 
